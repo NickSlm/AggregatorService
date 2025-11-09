@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AggregatorService.Interfaces
+{
+    public interface IBlizzardAuthService
+    {
+        Task<string> GetAccessTokenAsync();
+        Task RefreshAccessTokenAsync();
+    }
+}

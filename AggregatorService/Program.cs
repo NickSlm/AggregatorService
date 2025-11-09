@@ -1,14 +1,42 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting.WindowsServices;
+using AggregatorService.Interfaces;
+using AggregatorService.Services;
+
 namespace AggregatorService
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            var builder = Host.CreateApplicationBuilder(args);
-            builder.Services.AddHostedService<Worker>();
+            var host = Host.CreateDefaultBuilder(args)
+                .UseWindowsService(options =>
+                {
+                    options.ServiceName = "MyService";
+                })
+                .ConfigureServices(ConfigureMyServices)
+                .ConfigureLogging(ConfigureMyLogging)
+                .Build();
 
-            var host = builder.Build();
             host.Run();
         }
+
+        public static void ConfigureMyServices(HostBuilderContext context, IServiceCollection services)
+        {
+            services.AddHostedService<Worker>();
+            services.AddSingleton<ILoggingService, LoggingService>();
+            services.AddSingleton<IBlizzardAuthService, BlizzardAuthService>();
+
+        }
+        public static void ConfigureMyLogging(HostBuilderContext context, ILoggingBuilder logging)
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+            logging.AddDebug();
+            logging.AddEventLog();
+        }
+
     }
 }
