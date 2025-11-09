@@ -26,7 +26,7 @@ namespace AggregatorService.Services
 
         public async Task RefreshAccessTokenAsync()
         {
-            // TODO: Save using Windows Credentials Manager
+            // TODO: Encrypt using Windows Credentials Manager
             string clientId = "6eef8ac48dbc417197ed8a34c731e398";
             string clientSecret = "mxzBzxKXxQZsYU3ogGjPhoodi9O6VVmQ";
 

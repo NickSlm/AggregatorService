@@ -28,6 +28,7 @@ namespace AggregatorService
             services.AddHostedService<Worker>();
             services.AddSingleton<ILoggingService, LoggingService>();
             services.AddSingleton<IBlizzardAuthService, BlizzardAuthService>();
+            services.AddSingleton<IBlizzardApiService, BlizzardApiService>();
 
         }
         public static void ConfigureMyLogging(HostBuilderContext context, ILoggingBuilder logging)
