@@ -18,7 +18,11 @@ namespace AggregatorService
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(5000);
-                await _blizzardApiService.GetRawData();
+                var rawData = await _blizzardApiService.GetRawData();
+
+
+
+                Console.WriteLine(rawData.Entries.Count());
             }
         }
     }

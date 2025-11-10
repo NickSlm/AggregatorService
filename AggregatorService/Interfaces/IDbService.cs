@@ -1,5 +1,4 @@
-﻿using AggregatorService.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace AggregatorService.Interfaces
 {
-    public interface IBlizzardApiService
+    public interface IDbService
     {
-
-
-        Task<Leaderboard> GetRawData();
-
     }
 }
