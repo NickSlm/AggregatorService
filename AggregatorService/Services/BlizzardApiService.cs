@@ -1,27 +1,26 @@
 ﻿using AggregatorService.Interfaces;
 using AggregatorService.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using Polly;
 using static System.Net.WebRequestMethods;
+using Polly.Retry;
 
 namespace AggregatorService.Services
 {
     public class BlizzardApiService: IBlizzardApiService
     {
         private readonly IBlizzardAuthService _authService;
+        private readonly IAsyncPolicy<HttpResponseMessage> _asyncPolicy;
         private readonly HttpClient _httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://eu.api.blizzard.com")
         };
 
-        public BlizzardApiService(IBlizzardAuthService authService)
+        public BlizzardApiService(IBlizzardAuthService authService, IAsyncPolicy<HttpResponseMessage> asyncPolicy)
         {
             _authService = authService;
+            _asyncPolicy = asyncPolicy;
         }
 
 
@@ -32,18 +31,12 @@ namespace AggregatorService.Services
             var request = new HttpRequestMessage(HttpMethod.Get, $"/data/wow/pvp-season/33/pvp-leaderboard/3v3?namespace=dynamic-eu&locale=en_US");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.SendAsync(request);
-
+            var response = await _asyncPolicy.ExecuteAsync(() => _httpClient.SendAsync(request));
 
             var json = await response.Content.ReadAsStringAsync();
-
-
             var leaderboard = JsonSerializer.Deserialize<Leaderboard>(json);
 
-            foreach (Entry entry in leaderboard.Entries)
-            {
-                Console.WriteLine(entry.Player.Name);
-            }
+            Console.WriteLine(leaderboard);
 
         }
     }

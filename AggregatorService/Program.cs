@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting.WindowsServices;
 using AggregatorService.Interfaces;
 using AggregatorService.Services;
+using Polly;
+using System.Diagnostics.Metrics;
+using System;
 
 namespace AggregatorService
 {
@@ -29,6 +32,18 @@ namespace AggregatorService
             services.AddSingleton<ILoggingService, LoggingService>();
             services.AddSingleton<IBlizzardAuthService, BlizzardAuthService>();
             services.AddSingleton<IBlizzardApiService, BlizzardApiService>();
+            services.AddSingleton<IAsyncPolicy<HttpResponseMessage>>( sp =>
+            {
+                var logger = sp.GetRequiredService<ILoggingService>();
+
+                return Policy
+                .Handle<HttpRequestException>()
+                .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                .WaitAndRetryAsync(
+                    3, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),(result, timespan, retryNo, context) =>
+                {logger.LogWarning($"Retry No{retryNo} due to {result.Exception?.Message ?? result.Result.StatusCode.ToString()}");}
+                );
+            });
 
         }
         public static void ConfigureMyLogging(HostBuilderContext context, ILoggingBuilder logging)
