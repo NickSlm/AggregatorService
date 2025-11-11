@@ -7,6 +7,8 @@ using AggregatorService.Services;
 using Polly;
 using System.Diagnostics.Metrics;
 using System;
+using AggregatorService.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AggregatorService
 {
@@ -23,12 +25,35 @@ namespace AggregatorService
                 .ConfigureLogging(ConfigureMyLogging)
                 .Build();
 
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<MyDbContext>();
+                    context.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating or initializing the database.");
+                    throw;
+                }
+            }
+
             host.Run();
         }
 
         public static void ConfigureMyServices(HostBuilderContext context, IServiceCollection services)
         {
             services.AddHostedService<Worker>();
+            services.AddScoped<IDbService ,DbService>();
+
+            services.AddDbContext<MyDbContext>(options =>
+            {
+                options.UseSqlite(context.Configuration.GetConnectionString("DefaultConnection"));
+            });
             services.AddSingleton<ILoggingService, LoggingService>();
             services.AddSingleton<IBlizzardAuthService, BlizzardAuthService>();
             services.AddSingleton<IBlizzardApiService, BlizzardApiService>();
