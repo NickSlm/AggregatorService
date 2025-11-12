@@ -50,7 +50,7 @@ namespace AggregatorService
             services.AddHostedService<Worker>();
             services.AddScoped<IDbService ,DbService>();
 
-            services.AddDbContext<MyDbContext>(options =>
+            services.AddDbContextFactory<MyDbContext>(options =>   
             {
                 options.UseSqlite(context.Configuration.GetConnectionString("DefaultConnection"));
             });
