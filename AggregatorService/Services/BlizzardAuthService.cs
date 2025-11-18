@@ -14,13 +14,13 @@ namespace AggregatorService.Services
         private string _accessToken;
         private DateTime _tokenExpiration;
 
-
         public async Task<string> GetAccessTokenAsync()
         {
             if (string.IsNullOrEmpty(_accessToken) || DateTime.UtcNow >= _tokenExpiration)
             {
                 await RefreshAccessTokenAsync();
             }
+            Console.WriteLine(_accessToken);
             return _accessToken;
         }
 
@@ -54,6 +54,5 @@ namespace AggregatorService.Services
             _accessToken = token.ToString();
 
         }
-
     }
 }

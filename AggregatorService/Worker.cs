@@ -5,25 +5,21 @@ namespace AggregatorService
     public class Worker : BackgroundService
     {
         private readonly ILoggingService _loggingService;
-        private readonly IBlizzardApiService _blizzardApiService;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public Worker(ILoggingService loggingService, IBlizzardApiService blizzardApiService)
+        public Worker(ILoggingService loggingService, IServiceScopeFactory scopeFactory)
         {
             _loggingService = loggingService;
-            _blizzardApiService = blizzardApiService;
+            _scopeFactory = scopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                await Task.Delay(5000);
-                var rawData = await _blizzardApiService.GetRawData();
+            using var scope = _scopeFactory.CreateScope();
+            var dbService = scope.ServiceProvider.GetService<IDbService>();
+            await dbService.SaveSnapshot();
 
-
-
-                Console.WriteLine(rawData.Entries.Count());
-            }
+            _loggingService.LogInfo("Snapshot saved");
         }
     }
 }

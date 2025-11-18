@@ -17,8 +17,6 @@ namespace AggregatorService.Data
 
         }
 
-        public DbSet<Entry> Entries { get; set; }
-
-
+        public DbSet<LeaderboardSnapshot> LeaderboardSnapshots { get; set; }
     }
 }

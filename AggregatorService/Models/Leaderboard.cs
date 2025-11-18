@@ -9,9 +9,6 @@ namespace AggregatorService.Models
 {
     public class Leaderboard
     {
-
-        public int Id { get; set; }
-
         [JsonPropertyName("name")]
         public string Name { get; set; }
 

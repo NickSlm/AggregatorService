@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace AggregatorService.Models
+namespace AggregatorService.Data
 {
-    public class Character
+    public class LeaderboardSnapshot
     {
-
-        [JsonPropertyName("id")]
         public int Id { get; set; }
-
-        [JsonPropertyName("name")]
+        public DateTime DatePulled { get; set; }
         public string Name { get; set; }
-
+        public List<LeaderboardEntry> Entries { get; set; }
     }
 }

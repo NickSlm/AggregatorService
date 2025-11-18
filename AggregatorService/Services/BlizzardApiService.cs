@@ -1,10 +1,10 @@
 ﻿using AggregatorService.Interfaces;
-using AggregatorService.Models;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Polly;
 using static System.Net.WebRequestMethods;
 using Polly.Retry;
+using AggregatorService.Models;
 
 namespace AggregatorService.Services
 {
@@ -23,11 +23,10 @@ namespace AggregatorService.Services
             _asyncPolicy = asyncPolicy;
         }
 
-
-        // TODO: add polly method to retry to fetch data on error
         public async Task<Leaderboard> GetRawData()
         {
             var token = await _authService.GetAccessTokenAsync();
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"/data/wow/pvp-season/33/pvp-leaderboard/3v3?namespace=dynamic-eu&locale=en_US");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -37,7 +36,6 @@ namespace AggregatorService.Services
             var leaderboard = JsonSerializer.Deserialize<Leaderboard>(json);
 
             return leaderboard;
-
         }
     }
 }
