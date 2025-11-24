@@ -15,11 +15,37 @@ namespace AggregatorService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using var scope = _scopeFactory.CreateScope();
-            var dbService = scope.ServiceProvider.GetService<IDbService>();
-            await dbService.SaveSnapshot();
 
-            _loggingService.LogInfo("Snapshot saved");
+            while (!stoppingToken.IsCancellationRequested) 
+            {
+                int attempt = 0;
+
+                while (attempt < 3)
+                {
+                    try
+                    {
+                        using var scope = _scopeFactory.CreateScope();
+                        var dbService = scope.ServiceProvider.GetService<IDbService>();
+                        await dbService.SaveSnapshot();
+
+                        _loggingService.LogInfo($"Snapshot saved on {DateTime.UtcNow}");
+
+                        await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
+                        break;
+
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggingService.LogError(ex, $"Failed saving snapshot, attempt:{attempt}");
+                        attempt++;
+                        await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                    }
+                }
+            }
         }
     }
 }

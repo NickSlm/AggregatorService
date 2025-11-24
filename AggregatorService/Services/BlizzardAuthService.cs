@@ -20,7 +20,6 @@ namespace AggregatorService.Services
             {
                 await RefreshAccessTokenAsync();
             }
-            Console.WriteLine(_accessToken);
             return _accessToken;
         }
 
