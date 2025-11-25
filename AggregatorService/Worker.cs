@@ -18,6 +18,16 @@ namespace AggregatorService
 
             while (!stoppingToken.IsCancellationRequested) 
             {
+
+                DateTime designatedTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 0, 0, DateTimeKind.Utc);
+                if (designatedTime <= DateTime.UtcNow)
+                {
+                    designatedTime.AddDays(1);
+                }
+                var delay = designatedTime - DateTime.UtcNow;
+
+                await Task.Delay(delay, stoppingToken);
+
                 int attempt = 0;
 
                 while (attempt < 3)
@@ -30,7 +40,8 @@ namespace AggregatorService
 
                         _loggingService.LogInfo($"Snapshot saved on {DateTime.UtcNow}");
 
-                        await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
+
+                        //TODO: change to once a day at 23:59
                         break;
 
                     }
