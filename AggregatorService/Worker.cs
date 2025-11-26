@@ -19,13 +19,14 @@ namespace AggregatorService
             while (!stoppingToken.IsCancellationRequested) 
             {
 
-                DateTime designatedTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 0, 0, DateTimeKind.Utc);
+                DateTime designatedTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 00, 0, DateTimeKind.Utc);
                 if (designatedTime <= DateTime.UtcNow)
                 {
-                    designatedTime.AddDays(1);
+                    designatedTime = designatedTime.AddDays(1);
                 }
-                var delay = designatedTime - DateTime.UtcNow;
 
+                var delay = designatedTime - DateTime.UtcNow;
+                _loggingService.LogInfo($"Next Snapshot scheduled at {designatedTime} UTC");
                 await Task.Delay(delay, stoppingToken);
 
                 int attempt = 0;
@@ -40,8 +41,6 @@ namespace AggregatorService
 
                         _loggingService.LogInfo($"Snapshot saved on {DateTime.UtcNow}");
 
-
-                        //TODO: change to once a day at 23:59
                         break;
 
                     }
