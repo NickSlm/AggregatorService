@@ -19,7 +19,7 @@ namespace AggregatorService
             var host = Host.CreateDefaultBuilder(args)
                 .UseWindowsService(options =>
                 {
-                    options.ServiceName = "MyService";
+                    options.ServiceName = "Collector";
                 })
                 .ConfigureServices(ConfigureMyServices)
                 .ConfigureLogging(ConfigureMyLogging)
@@ -76,7 +76,11 @@ namespace AggregatorService
             logging.ClearProviders();
             logging.AddConsole();
             logging.AddDebug();
-            logging.AddEventLog();
+            logging.AddEventLog(options =>
+            {
+                options.SourceName = "Collector";
+                options.LogName = "Application";
+            });
         }
 
     }
