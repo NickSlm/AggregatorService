@@ -9,6 +9,7 @@ using System.Diagnostics.Metrics;
 using System;
 using AggregatorService.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Build.Framework;
 
 namespace AggregatorService
 {
@@ -25,10 +26,12 @@ namespace AggregatorService
                 .ConfigureLogging(ConfigureMyLogging)
                 .Build();
 
-
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILoggingService>();
+
+                logger.LogInfo($"Collector started at {DateTime.UtcNow}");
                 try
                 {
                     var context = services.GetRequiredService<MyDbContext>();
@@ -36,7 +39,6 @@ namespace AggregatorService
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred while migrating or initializing the database.");
                     throw;
                 }
@@ -80,6 +82,7 @@ namespace AggregatorService
             {
                 options.SourceName = "Collector";
                 options.LogName = "Application";
+                options.Filter = (category, logLevel) => logLevel >= LogLevel.Information;
             });
         }
 
