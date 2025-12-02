@@ -16,7 +16,7 @@ namespace AggregatorService
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
 
-            DateTime designatedTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 11, 30, 00, DateTimeKind.Utc);
+            DateTime designatedTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 7, 30, 00, DateTimeKind.Utc);
             while (!stoppingToken.IsCancellationRequested) 
             {
 
