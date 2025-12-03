@@ -1,4 +1,4 @@
-﻿using AggregatorService.Models;
+﻿using Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System;

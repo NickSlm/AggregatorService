@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Shared.Interfaces
 {
-    class ILoggingService
+    public interface ILoggingService
     {
+
+
+        void LogInfo(string message);
+        void LogWarning(string message);
+        void LogError(Exception ex, string message);
+
     }
 }

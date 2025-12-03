@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AggregatorService.Data;
 using AggregatorService.Interfaces;
-using AggregatorService.Models;
+using Shared.Models;
 using Microsoft.VisualBasic;
 
 namespace AggregatorService.Services

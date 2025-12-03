@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting.WindowsServices;
+using Shared.Interfaces;
+using Shared.Services;
 using AggregatorService.Interfaces;
 using AggregatorService.Services;
 using Polly;

@@ -1,5 +1,6 @@
 using AggregatorService.Interfaces;
-
+using Shared.Interfaces;
+using Shared.Services;
 namespace AggregatorService
 {
     public class Worker : BackgroundService

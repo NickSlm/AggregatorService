@@ -4,7 +4,7 @@ using System.Text.Json;
 using Polly;
 using static System.Net.WebRequestMethods;
 using Polly.Retry;
-using AggregatorService.Models;
+using Shared.Models;
 
 namespace AggregatorService.Services
 {
