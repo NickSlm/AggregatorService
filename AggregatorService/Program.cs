@@ -49,7 +49,7 @@ namespace AggregatorService
             host.Run();
         }
 
-        public static void ConfigureMyServices(HostBuilderContext context, IServiceCollection services)
+        private static void ConfigureMyServices(HostBuilderContext context, IServiceCollection services)
         {
             services.AddHostedService<Worker>();
             services.AddScoped<IDbService ,DbService>();
@@ -75,7 +75,7 @@ namespace AggregatorService
             });
 
         }
-        public static void ConfigureMyLogging(HostBuilderContext context, ILoggingBuilder logging)
+        private static void ConfigureMyLogging(HostBuilderContext context, ILoggingBuilder logging)
         {
             logging.ClearProviders();
             logging.AddConsole();
