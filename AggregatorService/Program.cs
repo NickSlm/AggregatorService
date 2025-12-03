@@ -9,7 +9,7 @@ using AggregatorService.Services;
 using Polly;
 using System.Diagnostics.Metrics;
 using System;
-using AggregatorService.Data;
+using Shared.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Build.Framework;
 

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AggregatorService.Data;
+using Shared.Data;
 using AggregatorService.Interfaces;
+using Shared.Data;
 using Shared.Models;
 using Microsoft.VisualBasic;
 

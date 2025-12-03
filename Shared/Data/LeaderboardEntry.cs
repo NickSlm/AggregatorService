@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AggregatorService.Data
+namespace Shared.Data
 {
     public class LeaderboardEntry
     {
@@ -18,6 +18,8 @@ namespace AggregatorService.Data
         public int Lost { get; set; }
 
         public LeaderboardSnapshot Snapshot { get; set; }
+
+
 
     }
 }

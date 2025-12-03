@@ -1,16 +1,15 @@
-﻿using Shared.Models;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AggregatorService.Data
+namespace Shared.Data
 {
     public class MyDbContext: DbContext
     {
+
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
@@ -18,5 +17,6 @@ namespace AggregatorService.Data
         }
 
         public DbSet<LeaderboardSnapshot> LeaderboardSnapshots { get; set; }
+
     }
 }

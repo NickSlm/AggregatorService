@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AggregatorService.Interfaces
+namespace CleanupService.Interfaces
 {
     public interface IDbService
     {
-        Task SaveSnapshot();
-
     }
 }
