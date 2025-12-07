@@ -2,6 +2,8 @@ using Shared.Interfaces;
 using Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using CleanupService.Data;
+using CleanupService.Interfaces;
+using CleanupService.Services;
 
 namespace CleanupService
 {
@@ -24,7 +26,9 @@ namespace CleanupService
 
         private static void ConfigureMyServices(HostBuilderContext context, IServiceCollection services)
         {
+            services.AddHostedService<Worker>();
             services.AddSingleton<ILoggingService, LoggingService>();
+            services.AddScoped<IDbService, DbService>();
             services.AddDbContextFactory<MyDbContext>(options =>
             {
                 options.UseSqlite(context.Configuration.GetConnectionString("DefaultConnection"));

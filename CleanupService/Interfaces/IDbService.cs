@@ -8,5 +8,8 @@ namespace CleanupService.Interfaces
 {
     public interface IDbService
     {
+
+        Task CleanOldRecords();
+
     }
 }
