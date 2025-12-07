@@ -1,7 +1,7 @@
 using Shared.Interfaces;
 using Shared.Services;
-using Shared.Data;
 using Microsoft.EntityFrameworkCore;
+using CleanupService.Data;
 
 namespace CleanupService
 {
@@ -9,7 +9,6 @@ namespace CleanupService
     {
         public static void Main(string[] args)
         {
-
             var host = Host.CreateDefaultBuilder(args)
                 .UseWindowsService(options =>
                 {
@@ -30,10 +29,9 @@ namespace CleanupService
             {
                 options.UseSqlite(context.Configuration.GetConnectionString("DefaultConnection"));
             });
-
         }
 
-        private static void ConfigureMyLogging(HostBuilderContext context, ILoggingBuilder logging)
+        private static void ConfigureMyLogging(HostBuilderContext context, ILoggingBuilder logging) 
         {
             logging.ClearProviders();
             logging.AddConsole();

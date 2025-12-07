@@ -18,5 +18,14 @@ namespace Shared.Data
 
         public DbSet<LeaderboardSnapshot> LeaderboardSnapshots { get; set; }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<LeaderboardSnapshot>()
+                .HasMany(s => s.Entries)
+                .WithOne(e => e.Snapshot)
+                .HasForeignKey(e => e.SnapshotId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

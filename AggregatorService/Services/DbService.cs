@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Shared.Data;
 using AggregatorService.Interfaces;
-using Shared.Data;
 using Shared.Models;
 using Microsoft.VisualBasic;
 

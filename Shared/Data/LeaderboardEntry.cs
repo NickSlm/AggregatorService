@@ -17,6 +17,7 @@ namespace Shared.Data
         public int Won { get; set; }
         public int Lost { get; set; }
 
+        public int SnapshotId { get; set; }
         public LeaderboardSnapshot Snapshot { get; set; }
 
 
