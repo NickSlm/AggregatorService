@@ -35,6 +35,7 @@ namespace AggregatorService
 
                 while (attempt < 3)
                 {
+                    attempt++;
                     try
                     {
                         using var scope = _scopeFactory.CreateScope();
@@ -53,7 +54,6 @@ namespace AggregatorService
                     catch (Exception ex)
                     {
                         _loggingService.LogError(ex, $"Failed saving snapshot, attempt:{attempt}");
-                        attempt++;
                         await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
                     }
                 }

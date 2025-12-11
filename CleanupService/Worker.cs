@@ -18,25 +18,48 @@ namespace CleanupService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-                try
-                {
-                    using var scope = _scopeFactory.CreateScope();
-                    var dbService = scope.ServiceProvider.GetService<IDbService>();
-                    await dbService.CleanOldRecords();
 
-                    _loggingService.LogInfo("Records Removed");
-                    await Task.Delay(10000, stoppingToken);
-                }
-                catch (TaskCanceledException)
-                {
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    _loggingService.LogError(ex, $"Error {ex} while removing old records");
-                }
+            DateTime designatedDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 22, 00, 00, DateTimeKind.Utc);
+
+            while (!stoppingToken.IsCancellationRequested)
             {
+
+                TimeSpan delay = designatedDate - DateTime.UtcNow;
+                if (delay < TimeSpan.Zero)
+                {
+                    delay = TimeSpan.Zero;
+                }
+
+                _loggingService.LogInfo($"Next Cleanup scheduled at {designatedDate} UTC");
+
+                await Task.Delay(delay, stoppingToken);
+
+                int attempt = 0;
+
+                while(attempt < 3)
+                {
+                    attempt++;
+                    try
+                    {
+                        using var scope = _scopeFactory.CreateScope();
+                        var dbService = scope.ServiceProvider.GetService<IDbService>();
+                        await dbService.CleanOldRecords();
+
+                        _loggingService.LogInfo("Records Removed");
+
+                        break;
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggingService.LogError(ex, $"Error {ex} while removing old records");
+                        await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                    }
+                }
+                designatedDate = designatedDate.AddDays(1);
             }
         }
     }
