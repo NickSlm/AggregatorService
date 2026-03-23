@@ -1,6 +1,7 @@
 using CleanupService.Data;
 using CleanupService.Interfaces;
 using Shared.Interfaces;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace CleanupService
 {
@@ -21,6 +22,7 @@ namespace CleanupService
 
             DateTime designatedDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 22, 00, 00, DateTimeKind.Utc);
 
+
             while (!stoppingToken.IsCancellationRequested)
             {
 
@@ -36,7 +38,7 @@ namespace CleanupService
 
                 int attempt = 0;
 
-                while(attempt < 3)
+                while (attempt < 3)
                 {
                     attempt++;
                     try

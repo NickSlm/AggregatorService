@@ -10,6 +10,5 @@ namespace CleanupService.Interfaces
     {
 
         Task CleanOldRecords();
-
     }
 }

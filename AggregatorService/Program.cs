@@ -53,14 +53,17 @@ namespace AggregatorService
         {
             services.AddHostedService<Worker>();
             services.AddScoped<IDbService ,DbService>();
-
+            services.AddHttpClient("BlizzardApi", client =>
+            {
+                client.BaseAddress = new Uri("https://eu.api.blizzard.com");
+            });
             services.AddDbContextFactory<MyDbContext>(options =>   
             {
                 options.UseSqlite(context.Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddSingleton<ILoggingService, LoggingService>();
             services.AddSingleton<IBlizzardAuthService, BlizzardAuthService>();
-            services.AddSingleton<IBlizzardApiService, BlizzardApiService>();
+            services.AddScoped<IBlizzardApiService, BlizzardApiService>();
             services.AddSingleton<IAsyncPolicy<HttpResponseMessage>>( sp =>
             {
                 var logger = sp.GetRequiredService<ILoggingService>();

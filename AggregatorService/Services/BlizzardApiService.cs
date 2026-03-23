@@ -12,15 +12,13 @@ namespace AggregatorService.Services
     {
         private readonly IBlizzardAuthService _authService;
         private readonly IAsyncPolicy<HttpResponseMessage> _asyncPolicy;
-        private readonly HttpClient _httpClient = new HttpClient()
-        {
-            BaseAddress = new Uri("https://eu.api.blizzard.com")
-        };
+        private readonly HttpClient _httpClient;
 
-        public BlizzardApiService(IBlizzardAuthService authService, IAsyncPolicy<HttpResponseMessage> asyncPolicy)
+        public BlizzardApiService(IBlizzardAuthService authService, IAsyncPolicy<HttpResponseMessage> asyncPolicy, IHttpClientFactory httpClientFactory)
         {
             _authService = authService;
             _asyncPolicy = asyncPolicy;
+            _httpClient = httpClientFactory.CreateClient("BlizzardApi");
         }
 
         public async Task<Leaderboard> GetRawData()
